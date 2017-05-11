@@ -64,27 +64,6 @@ class TestStation(object):
         pass
          
 
-class ProductionFixture(object):
-    def __init__ (self):
-        self.function=0
-        self.UUT = barcode()
-          
-    def initialize(self):        
-        search_timeout = 35
-        ser = serial.Serial()
-        ser.port = "COM5"
-        ser.baudrate = 115200
-        ser.bytesize = serial.EIGHTBITS #number of bits per bytes
-        ser.parity = serial.PARITY_NONE #set parity check: no parity
-        ser.stopbits = serial.STOPBITS_ONE #number of stop bits
-        #ser.timeout = None          #block read
-        ser.timeout = search_timeout     #non-block read
-        #ser.timeout = 2              #timeout block read
-        ser.xonxoff = False     #disable software flow control
-        ser.rtscts = False     #disable hardware (RTS/CTS) flow control
-        ser.dsrdtr = False       #disable hardware (DSR/DTR) flow control
-        ser.writeTimeout = 2     #timeout for write     
-
 
 class DeviceTest(object):
     def __init__ (self):
@@ -109,6 +88,9 @@ def init_values(test):
 
 UUT=barcode()
 
+def runTest(object):
+    
+    pass
 
 mesh_devices = ['unknown', 'Comm Hub', 'Location Hub', 'Hygiene Sensor']  #Device Types 0, 1, 2, 3
 

@@ -5,6 +5,7 @@
 #    May 10, 2017 04:42:20 PM
 import sys
 import time
+import test_support
 
 try:
     from Tkinter import *
@@ -17,8 +18,6 @@ try:
 except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
-
-import test_support
 
 
 

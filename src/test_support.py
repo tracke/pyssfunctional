@@ -6,14 +6,14 @@
 
 
 import sys
-import ssTestClass
-from ssTestClass import checkBarcodeData
+import ssTestStation
+import ssTestFixture
+import ssutil
+
+from ssTestStation import checkBarcodeData
+
 from array import array
 
-station = ssTestClass.TestStation()   
-fixture = ssTestClass.ProductionFixture()
-#UUT = ssTestClass.barcode()
- 
 try:
     from Tkinter import *
 except ImportError:
@@ -26,6 +26,12 @@ except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
 
+
+station = ssTestStation.TestStation()   
+fixture = ssTestFixture.ProductionFixture()
+test_status="idle"
+   
+
 def set_Tk_var():
     global che58
     che58 = StringVar()
@@ -36,23 +42,33 @@ def set_Tk_var():
     global barCodeEntry
     barCodeEntry = StringVar()
 
+#initialization - called from GUI
 def init(top, gui, *args, **kwargs):
     global w, top_level, root
     w = gui
     top_level = top
-    root = top     
+    root = top 
+    ssutil.setTxtBox("w.TextResults")    
     w.MessageOP.configure(text = station.initialize())
     w.MessageTS.configure(text = station.stationID)
     fixture.initialize()
     w.MessageTF.configure(text = fixture.function)
 
-def clearBarCodeFields():
+# clear out everything in preparation for testing
+def clearTestData():
     w.MessageWO.configure(text ="")
-    w.MessagePN.configure(text = "")
-    
+    w.MessagePN.configure(text = "")    
     pass
-        
-    
+
+# assign UUT data to GUI fields        
+def setUutDataFields(UUT):
+    w.Message9.configure(text = UUT.HWID)  #not sure about this one
+    w.MessageWO.configure(text = UUT.workOrder )
+    w.MessagePN.configure(text =  UUT.partNumber )
+     
+
+
+
     
 def configDataBase():
     pass
@@ -64,11 +80,16 @@ def extraMenuItem():
     pass
 
 
-def getBarcodeEntry(object):   
-    UUT = ssTestClass.checkBarcodeData(barCodeEntry.get())
-    w.Message9.configure(text = UUT.HWID)  #not sure about this one
-    w.MessageWO.configure(text = UUT.workOrder )
-    w.MessagePN.configure(text =  UUT.partNumber )
+def getBarcodeEntry(object):
+    clearTestData()   
+    UUT = ssTestStation.checkBarcodeData(barCodeEntry.get())
+    setUutDataFields(UUT)
+    test = ssTestFixture.Test()
+    test.target_hwid=UUT.HWID
+    testResult = fixture.run_test(UUT)
+    
+    #processError(testResult)
+    #submitResults(testResult)    
     pass
 
 def button4OnClick(p1):

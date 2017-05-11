@@ -37,6 +37,8 @@ def u2(x):
     else:
         return x
 
+# the following routines parse data fields from the serial response 
+# returned from the nRF tester
 
 def get_address():
     inp =ser.read(18)
@@ -48,7 +50,7 @@ def get_address():
     for x in range(1,12,2):
         ret=ret+response[-(x+1)]
         ret=ret+response[-x]      
-    print 'Address detected:', ret
+    print ( 'Address detected:', ret)
     return (ret)
 
 def get_fware():
@@ -102,7 +104,7 @@ def get_product_barcode(UUT):
 
 
 if __name__ == "__main__":
-    print" pySSFunctional Test Program"
+    print("pySSFunctional Test Program")
     
     
     test=DeviceTest()
