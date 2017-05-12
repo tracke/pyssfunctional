@@ -28,7 +28,8 @@ except ImportError:
 
 
 station = ssTestStation.TestStation()   
-fixture = ssTestFixture.ProductionFixture()
+#fixture = ssTestFixture.ProductionFixture()
+#test = ssTestFixture.Test()
 test_status="idle"
    
 
@@ -51,8 +52,8 @@ def init(top, gui, *args, **kwargs):
     ssutil.setTxtBox("w.TextResults")    
     w.MessageOP.configure(text = station.initialize())
     w.MessageTS.configure(text = station.stationID)
-    fixture.initialize()
-    w.MessageTF.configure(text = fixture.function)
+    #fixture.initialize()
+    w.MessageTF.configure(text = station.function)
 
 # clear out everything in preparation for testing
 def clearTestData():
@@ -64,10 +65,7 @@ def clearTestData():
 def setUutDataFields(UUT):
     w.Message9.configure(text = UUT.HWID)  #not sure about this one
     w.MessageWO.configure(text = UUT.workOrder )
-    w.MessagePN.configure(text =  UUT.partNumber )
-     
-
-
+    w.MessagePN.configure(text =  UUT.partNumber )     
 
     
 def configDataBase():
@@ -80,14 +78,17 @@ def extraMenuItem():
     pass
 
 
+#####################
+# This is called when a <return> #
+# is entered in the Entry Box       #
+#===================#
 def getBarcodeEntry(object):
     clearTestData()   
     UUT = ssTestStation.checkBarcodeData(barCodeEntry.get())
-    setUutDataFields(UUT)
-    test = ssTestFixture.Test()
-    test.target_hwid=UUT.HWID
-    testResult = fixture.run_test(UUT)
-    
+    setUutDataFields(UUT)    
+    # test.setParameters(UUT) # set up test parameters
+    testResult = station.performTest(UUT)
+    station.print_test_parameters(testResult)
     #processError(testResult)
     #submitResults(testResult)    
     pass
